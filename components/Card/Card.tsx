@@ -19,6 +19,15 @@ const Card = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const translateX = useSharedValue(0);
 
+  // カードデータが空の場合は、エラーメッセージを表示
+  if (cardData.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>カードデータが見つかりません</Text>
+      </View>
+    );
+  }
+
   const panGesture = Gesture.Pan()
     .onChange((event) => {
       translateX.value = event.translationX;
@@ -65,6 +74,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  errorText: {
+    fontSize: 18,
+    color: 'red',
   },
 });
 
