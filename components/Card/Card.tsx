@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
+  runOnJS,
 } from 'react-native-reanimated';
 
 const cardData = [
@@ -17,6 +19,7 @@ const cardData = [
 
 const Card = () => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  console.log('Initial currentCardIndex:', currentCardIndex); // 初期値をログ出力
   const translateX = useSharedValue(0);
 
   // カードデータが空の場合は、エラーメッセージを表示
@@ -31,18 +34,28 @@ const Card = () => {
   const panGesture = Gesture.Pan()
     .onChange((event) => {
       translateX.value = event.translationX;
+      console.log('translateX.value:', translateX.value); // translationXの値をログ出力
     })
     .onEnd((event) => {
       if (event.translationX < -50) {
         // 左にスワイプした場合
         const nextIndex = (currentCardIndex + 1) % cardData.length;
-        setCurrentCardIndex(nextIndex);
+        runOnJS(setCurrentCardIndex)(nextIndex);
+        console.log('Swiped left, nextIndex:', nextIndex);
       } else if (event.translationX > 50) {
         // 右にスワイプした場合
         const prevIndex =
           (currentCardIndex - 1 + cardData.length) % cardData.length;
-        setCurrentCardIndex(prevIndex);
+        runOnJS(setCurrentCardIndex)(prevIndex);
+        console.log('Swiped right, prevIndex:', prevIndex);
       }
+
+      // スワイプ後のcurrentCardIndexをログ出力
+      console.log(
+        'Current card index after swipe:',
+        (currentCardIndex + cardData.length) % cardData.length
+      );
+
       translateX.value = withSpring(0);
     });
 
@@ -53,13 +66,15 @@ const Card = () => {
   });
 
   return (
-    <View style={styles.container}>
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={animatedStyle}>
-          <Text style={styles.cardText}>{cardData[currentCardIndex]}</Text>
-        </Animated.View>
-      </GestureDetector>
-    </View>
+    <GestureHandlerRootView>
+      <View style={styles.container}>
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={animatedStyle}>
+            <Text style={styles.cardText}>{cardData[currentCardIndex]}</Text>
+          </Animated.View>
+        </GestureDetector>
+      </View>
+    </GestureHandlerRootView>
   );
 };
 
