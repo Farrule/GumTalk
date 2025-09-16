@@ -2,6 +2,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { Text, StyleSheet, View } from 'react-native';
 import NavigateButton from '../components/Button/NavigateButton';
+import Card from '../components/Card/Card';
 
 type RootStackParamList = {
   HomeScreen: undefined;
@@ -19,6 +20,7 @@ const GameScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <Text>ゲーム画面</Text>
+      <Card />
       <NavigateButton
         title="ホームに戻る"
         onPress={() => navigation.navigate('HomeScreen')}
