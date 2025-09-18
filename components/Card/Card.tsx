@@ -9,6 +9,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import * as topics from './Topics.json';
+import Box from '../Box/Box';
 
 type TopicsCards = {
   [key: string]: {
@@ -18,10 +19,9 @@ type TopicsCards = {
 };
 
 const TopicsCards: TopicsCards = topics.topics;
-let card;
-let readed: number[] = [];
+let readed: string[] = [];
 
-const rand = (min: number, max: number): number => {
+const rand = (min: number, max: number): string => {
   // すべての数字が使用されたかチェック
   if (readed.length >= max - min + 1) {
     readed = []; // 使用済み配列をリセット
@@ -29,11 +29,13 @@ const rand = (min: number, max: number): number => {
   }
 
   while (true) {
-    let tmp = Math.floor(Math.random() * (max - min + 1)) + min;
-    if (!readed.includes(tmp)) {
-      readed.push(tmp);
+    let CardIndex = (
+      Math.floor(Math.random() * (max - min + 1)) + min
+    ).toString();
+    if (!readed.includes(CardIndex)) {
+      readed.push(CardIndex);
       console.log('Used numbers:', readed);
-      return tmp;
+      return CardIndex;
     }
   }
 };
@@ -42,18 +44,27 @@ const min = 1;
 const max = 60;
 
 const Card = () => {
-  const [currentCardIndex, setCurrentCardIndex] = useState('1');
+  // 初回レンダリング時に一度だけランダムな値を設定します
+  const [currentCardIndex, setCurrentCardIndex] = useState(() =>
+    rand(min, max)
+  );
+  const [nextCardIndex, setNextCardIndex] = useState(() => rand(min, max));
   const translateX = useSharedValue(0);
+
+  const updateCards = () => {
+    setCurrentCardIndex(nextCardIndex);
+    setNextCardIndex(rand(min, max));
+    console.log('Swiped left, new currentCardIndex:', nextCardIndex);
+  };
 
   const panGesture = Gesture.Pan()
     .onChange((event) => {
       translateX.value = event.translationX;
     })
     .onEnd((event) => {
+      // スワイプが一定量を超えたらカードを更新
       if (event.translationX < -50) {
-        card = rand(min, max).toString();
-        setCurrentCardIndex(card);
-        console.log('Swiped left, nextIndex:', card);
+        runOnJS(updateCards)();
       }
 
       translateX.value = withSpring(0);
@@ -68,6 +79,7 @@ const Card = () => {
   return (
     <GestureHandlerRootView>
       <View style={styles.container}>
+        <Box num={TopicsCards[nextCardIndex].num} />
         <GestureDetector gesture={panGesture}>
           <Animated.View style={animatedStyle}>
             <Text style={styles.cardText}>
