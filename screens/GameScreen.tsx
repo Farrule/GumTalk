@@ -19,7 +19,6 @@ type Props = {
 const GameScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
-      <Text>ゲーム画面</Text>
       <Card />
       <NavigateButton
         title="ホームに戻る"

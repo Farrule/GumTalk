@@ -55,13 +55,6 @@ const Card = () => {
         setCurrentCardIndex(card);
         console.log('Swiped left, nextIndex:', card);
       }
-      // } else if (event.translationX > 50) {
-      //   // 右にスワイプした場合
-      //   const prevIndex =
-      //     (currentCardIndex - 1 + cardData.length) % cardData.length;
-      //   runOnJS(setCurrentCardIndex)(prevIndex);
-      //   console.log('Swiped right, prevIndex:', prevIndex);
-      // }
 
       translateX.value = withSpring(0);
     });
