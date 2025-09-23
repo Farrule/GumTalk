@@ -1,6 +1,4 @@
-import { Component } from 'react';
 import { Button } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Props {
   title: string;
