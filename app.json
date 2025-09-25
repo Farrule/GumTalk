@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "GumTalk",
-    "slug": "GumTalk",
+    "slug": "gumtalk",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
@@ -26,6 +26,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8c9b0aad-999f-44ea-81d5-9d071b6e2e0d"
+      }
+    },
+    "owner": "farrule",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8c9b0aad-999f-44ea-81d5-9d071b6e2e0d"
     }
   }
 }
