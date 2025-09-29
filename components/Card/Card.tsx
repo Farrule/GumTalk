@@ -41,7 +41,7 @@ const rand = (min: number, max: number): string => {
 };
 
 const min = 1;
-const max = 60;
+const max = Object.keys(TopicsCards).length;
 
 const Card = () => {
   // 初回レンダリング時に一度だけランダムな値を設定します
